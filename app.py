@@ -31,15 +31,14 @@ def authenticate():
 def index():
     return jsonify(
         {
-            'message': 'Welcome to our API', 
+            'message': 'Welcome to my API', 
             'documentation': 'https://documenter.getpostman.com/view/24762258/2sB2cSfNjY',
-            'access': 'use postman or curl',
+            'access': 'Use postman or curl',
         }
     )
 
 @app.route('/items', methods=['GET'])
 def get_items():
-
     items = Item.query.all()
     if items:
         return jsonify([{'id': item.id, 'name': item.name, 'description': item.description, 'price': item.price} for item in items]), 200
@@ -59,12 +58,10 @@ def create_item():
     auth = authenticate()
     if auth:
         return auth
-
     if not request.is_json:
         data = request.args.to_dict()
     else:
-        data = request.json
-        
+        data = request.json        
     try:
         new_item = Item(name=data['name'], description=data['description'], price=float(data['price']))
         db.session.add(new_item)
